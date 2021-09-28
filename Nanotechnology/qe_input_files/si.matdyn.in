@@ -1,0 +1,14 @@
+&input
+  asr = 'simple'
+  flfrc = 'si.fc'
+  flfrq = 'si.freq'
+  dos=.false.
+  q_in_band_form=.true.
+/
+6
+0.0 0.0 0.0 20
+1.0 0.0 0.0 20
+1.0 0.5 0.0 20
+1.0 1.0 0.0 20
+0.0 0.0 0.0 20
+0.5 0.5 0.5 1
