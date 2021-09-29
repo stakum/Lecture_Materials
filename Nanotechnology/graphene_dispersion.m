@@ -60,10 +60,11 @@ xlabel('Wavenumber, {\it q}')
 ylabel('Frequency (THz)')
 
 %%
-n=40;
-kx=linspace(-2*pi/(sqrt(3)*a),2*pi/(sqrt(3)*a),n);
-ky=linspace(-2*pi/(3*a),2*pi/(3*a),n);
-kmax=2*pi/(sqrt(3)*a);
+n=20;
+k=2*pi/(sqrt(3)*a);
+kx=linspace(-k,k,n); % Uniform grid in the x-direction
+ky=linspace(-k,k,n); % Uniform grid in the y-direction
+
 omega=zeros(6,length(kx),length(ky));
 for ind=1:length(kx)
     for jnd=1:length(ky)
@@ -78,17 +79,112 @@ end
 figure
 hold on
 for ind=1:6
-    surf(kx/max(kx),ky'/max(ky),reshape(omega(ind,:,:),[length(kx),length(ky)]))
+    surf(kx,ky',reshape(omega(ind,:,:),[length(kx),length(ky)]))
 end
 grid on
 xlabel('Normalized {\it q_{x}}')
 ylabel('Normalized {\it q_{y}}')
 zlabel('Frequency (THz)')
 view(3)
+        hold on
+        line([k k],[-k/sqrt(3) k/sqrt(3)],[0 0],'Color','k','LineWidth',1.5) 
+        line([k 0],[k/sqrt(3) k],[0 0],'Color','k','LineWidth',1.5) 
+        line([0 -k],[k k/sqrt(3)],[0 0],'Color','k','LineWidth',1.5) 
+        line([-k -k],[k/sqrt(3) -k/sqrt(3)],[0 0],'Color','k','LineWidth',1.5) 
+        line([-k 0],[-k/sqrt(3) -k],[0 0],'Color','k','LineWidth',1.5) 
+        line([0 k],[-k -k/sqrt(3) ],[0 0],'Color','k','LineWidth',1.5) 
+        hold off
 
 figure
 for ind=1:6
     subplot(2,3,ind)
-    [C,h]=contourf(kx/kmax,ky'/kmax,reshape(omega(ind,:,:),[length(kx),length(ky)]));
+    [C,h]=contourf(kx,ky',reshape(omega(ind,:,:),[length(kx),length(ky)]));
     clabel(C,h)
 end
+
+
+%% Functions
+
+function [DAA,DAB,DBA,DBB]=dynamat(phi,kvec,a)
+phi1NN=diag(phi(1,1:3));
+phi2NN=diag(phi(2,1:3));
+phi3NN=diag(phi(3,1:3));
+phi4NN=diag(phi(4,1:3));
+
+DAA=zeros(3,3);
+DAB=zeros(3,3);
+DBA=zeros(3,3);
+DBB=zeros(3,3);
+% 1NN
+for ind=0:2
+    theta=ind*(2*pi/3);
+    U=rotmat(theta);
+    rvec=relative_vector(a/sqrt(3),theta);
+    K=inv(U)*phi1NN*U;
+    DAB=DAB-K*exp(1i*dot(kvec,rvec));
+    DAA=DAA+K;
+    
+    theta=ind*(2*pi/3)+pi/3;
+    U=rotmat(theta);
+    rvec=relative_vector(a/sqrt(3),theta);
+    K=inv(U)*phi1NN*U;
+    DBA=DBA-K*exp(1i*dot(kvec,rvec));
+    DBB=DBB+K;
+end
+% 2NN
+for ind=0:5
+    theta=ind*(2*pi/6)+pi/6;
+    U=rotmat(theta);
+    rvec=relative_vector(a,theta);
+    K=inv(U)*phi2NN*U;
+    DAA=DAA+K*(1-exp(1i*dot(kvec,rvec)));
+    DBB=DBB+K*(1-exp(1i*dot(kvec,rvec)));
+end
+% 3NN
+for ind=0:2
+    theta=ind*(2*pi/3)+pi/3;
+    U=rotmat(theta);
+    rvec=relative_vector(2*a/sqrt(3),theta);
+    K=inv(U)*phi3NN*U;
+    DAB=DAB-K*exp(1i*dot(kvec,rvec));
+    DAA=DAA+K;
+    theta=ind*(2*pi/3);
+    U=rotmat(theta);
+    rvec=relative_vector(2*a/sqrt(3),theta);
+    K=inv(U)*phi3NN*U;
+    DBA=DBA-K*exp(1i*dot(kvec,rvec));
+    DBB=DBB+K;
+end
+% 4NN
+theta4NN_AA=[0.3335 1.7609 2.4279];
+theta4NN_BB=[2.8081 1.3807 0.7137];
+for ind=-1:1
+    if ind~=0
+        for jnd=1:3
+            theta=ind*theta4NN_AA(jnd);
+            U=rotmat(theta);
+            rvec=relative_vector(sqrt(21)*a/3,theta);
+            K=inv(U)*phi4NN*U;
+            DAB=DAB-K*exp(1i*dot(kvec,rvec));
+            DAA=DAA+K;
+        end
+        for jnd=1:3
+            theta=ind*theta4NN_BB(jnd);
+            U=rotmat(theta);
+            rvec=relative_vector(sqrt(21)*a/3,theta);
+            K=inv(U)*phi4NN*U;
+            DBA=DBA-K*exp(1i*dot(kvec,rvec));
+            DBB=DBB+K;
+        end        
+    end
+end
+end
+
+function U=rotmat(theta)
+    U=[cos(theta) sin(theta) 0; -sin(theta) cos(theta) 0; 0 0 1];
+end
+
+function Rij=relative_vector(distance,theta)
+    Rij=distance*[cos(theta) sin(theta)];
+end
+
