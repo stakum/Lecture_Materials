@@ -1,5 +1,8 @@
 clear all; close all; clc;
 %% one-dimensional monoatomic lattice
+% Takuma Shiga, The University of Tokyo, 
+% shiga@photon.t.u-tokyo.ac.jp
+
 K=1;
 M=1;
 N=50;
