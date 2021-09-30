@@ -1,4 +1,11 @@
 clear all; close all; clc;
+%% Graphene phonon dispersion relation
+% Reference: 
+% - R. Saito, G. Dresselhaus, M. S. Dresselhaus, Physical Properties of Carbon Nanotube (1998) Chapter 9
+
+% Takuma Shiga, The University of Tokyo, 
+% shiga@photon.t.u-tokyo.ac.jp
+
 dyn=1e-5; % Newton (N)
 cm=1e-2;  % meter (m)
 au=1.6726219e-27;
