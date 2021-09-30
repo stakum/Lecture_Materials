@@ -1,5 +1,7 @@
 close all; clear all; clc;
 %% transmission function for single-atomic junction
+% Takuma Shiga, The University of Tokyo, 
+% shiga@photon.t.u-tokyo.ac.jp
 
 omega=linspace(1e-3,2,500);
 m1=1; % mass for left-semi-infinite lattice
