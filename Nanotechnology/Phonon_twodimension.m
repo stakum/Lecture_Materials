@@ -1,5 +1,8 @@
 clear all; close all; clc;
 %% Phonon dispersion relation of two-dimensional monoatomic lattice
+% Takuma Shiga, The University of Tokyo, 
+% shiga@photon.t.u-tokyo.ac.jp
+
 alat=1.0; % lattice constant 
 K1=1.0; % spring constant for nearest neighbor
 K2=0.3; % spring constant for next nearest neighbor 
