@@ -1,5 +1,7 @@
 clear all; close all; clc;
 %% Transmission on single-point mass defect one-dimensional lattice 
+% Takuma Shiga, The University of Tokyo, 
+% shiga@photon.t.u-tokyo.ac.jp
 
 ka=linspace(0,pi,100); % wavenumber 
 beta=1; % Spring constant for one-dimensional lattice
