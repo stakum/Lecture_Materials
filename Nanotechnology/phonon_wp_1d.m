@@ -1,5 +1,8 @@
 clear all; close all; clc;  
 %% phonon wave-packet dynamics (pwd) for one-dimensional FPU lattice
+% Takuma Shiga, The University of Tokyo, 
+% shiga@photon.t.u-tokyo.ac.jp
+
 % SI unit is used
 amu=1.660539040e-27; % kg
 ang=1e-10;    % m
