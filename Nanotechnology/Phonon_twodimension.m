@@ -30,9 +30,9 @@ qy=2*pi*(-Ny/2+1:Ny/2)/alat/Ny;
 
 f=figure; 
 ax=gca;
-surf(qx/(pi/alat),qy/(pi/alat),omega1,'LineWidth',1.5)
+surfc(qx/(pi/alat),qy/(pi/alat),omega1,'LineWidth',1.5)
 hold on
-surf(qx/(pi/alat),qy/(pi/alat),omega2,'LineWidth',1.5)
+surfc(qx/(pi/alat),qy/(pi/alat),omega2,'LineWidth',1.5)
 grid on
 xlim([-1 1]); ylim([-1 1]);zlim([0 3])
 
